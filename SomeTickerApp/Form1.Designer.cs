@@ -1,6 +1,6 @@
 ﻿namespace SomeTickerApp
 {
-    partial class Form1
+    partial class MainTickerForm
     {
         /// <summary>
         /// Wymagana zmienna projektanta.
@@ -29,12 +29,30 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            this.mainTicker = new System.Windows.Forms.Timer(this.components);
+            this.SuspendLayout();
+            // 
+            // mainTicker
+            // 
+            this.mainTicker.Interval = 40;
+            this.mainTicker.Tick += new System.EventHandler(this.MainTicker_Tick);
+            // 
+            // MainTickerForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Name = "MainTickerForm";
+            this.Text = "Some Ticker App";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainTickerForm_Paint);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer mainTicker;
     }
 }
 
