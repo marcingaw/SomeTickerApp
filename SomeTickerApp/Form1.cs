@@ -21,11 +21,22 @@ namespace SomeTickerApp
 
         // The fraction of the horizontal oscillator step to be used as the
         // vertical oscillator step, in radians.
-        private double oscillatorHToVRatio = 0.9;
+        private double oscillatorHToVRatio = 0.83;
+
+        // The maximum count of past locations displayed in the ball trace.
+        private const int MAX_TRACE_LENGHTH = 255;
+
+        // The array with the ball trace and the last updated index in it.
+        private Tuple<double, double>[] ballTrace = new Tuple<double, double>[MAX_TRACE_LENGHTH];
+        private int lastBallTraceIndex = MAX_TRACE_LENGHTH - 1;
 
         public MainTickerForm()
         {
             InitializeComponent();
+            //for (int k = 0; k < ballTrace.Length; k++)
+            //{
+            //    ballTrace[k] = new Tuple<double, double>(-2.0, -2.0);
+            //}
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -47,6 +58,9 @@ namespace SomeTickerApp
                 oscillatorV -= 2 * Math.PI;
             }
 
+            lastBallTraceIndex = (lastBallTraceIndex + 1) % MAX_TRACE_LENGHTH;
+            ballTrace[lastBallTraceIndex] = new Tuple<double, double>(Math.Sin(oscillatorH), Math.Sin(oscillatorV));
+
             Invalidate();
         }
 
@@ -57,16 +71,27 @@ namespace SomeTickerApp
 
             double width = vcb.Width;
             double height = vcb.Height;
-            double x = (width / 2.0) + (width / 3.0) * Math.Sin(Math.Sin(oscillatorH));
-            double y = (height / 2.0) - (height / 3.0) * Math.Sin(Math.Sin(oscillatorV));
 
-            gr.DrawEllipse(Pens.Black, new Rectangle
+            for (int ctr = 1; ctr <= MAX_TRACE_LENGHTH; ctr++)
             {
-                X = (int)(x) - 5,
-                Y = (int)(y) - 5,
-                Width = 10,
-                Height = 10
-            });
+                int idx = (lastBallTraceIndex + ctr) % MAX_TRACE_LENGHTH;
+
+                if (ballTrace[idx] != null)
+                {
+                    double x = (width / 2.0) + (width / 3.0) * ballTrace[idx].Item1;
+                    double y = (height / 2.0) - (height / 3.0) * ballTrace[idx].Item2;
+
+                    gr.DrawEllipse(
+                        new Pen(Color.FromArgb(ctr, ctr, ctr), 3.0f),
+                        new Rectangle
+                        {
+                            X = (int)(x) - 1,
+                            Y = (int)(y) - 1,
+                            Width = 3,
+                            Height = 3
+                        });
+                }
+            }
         }
     }
 }
