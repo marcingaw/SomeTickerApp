@@ -33,10 +33,6 @@ namespace SomeTickerApp
         public MainTickerForm()
         {
             InitializeComponent();
-            //for (int k = 0; k < ballTrace.Length; k++)
-            //{
-            //    ballTrace[k] = new Tuple<double, double>(-2.0, -2.0);
-            //}
         }
 
         private void Form1_Load(object sender, EventArgs e)
